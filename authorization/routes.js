@@ -1,25 +1,18 @@
-const router = require("express").Router();
+import express from "express";
+const router = express.Router();
 
 // Controller Imports
-const AuthorizationController = require("./controllers/AuthorizationController");
+import { register, login } from "./controllers/AuthorizationController.js";
 
 // Middleware Imports
-const SchemaValidationMiddleware = require("../common/middlewares/SchemaValidationMiddleware");
+import { verify } from "../common/middlewares/SchemaValidationMiddleware.js";
 
 // JSON Schema Imports for payload verification
-const registerPayload = require("./schemas/registerPayload");
-const loginPayload = require("./schemas/loginPayload");
+import registerPayload from "./schemas/registerPayload.js";
+import loginPayload from "./schemas/loginPayload.js";
 
-router.post(
-  "/signup",
-  [SchemaValidationMiddleware.verify(registerPayload)],
-  AuthorizationController.register
-);
+router.post("/signup", [verify(registerPayload)], register);
 
-router.post(
-  "/login",
-  [SchemaValidationMiddleware.verify(loginPayload)],
-  AuthorizationController.login
-);
+router.post("/login", [verify(loginPayload)], login);
 
-module.exports = router;
+export default router;

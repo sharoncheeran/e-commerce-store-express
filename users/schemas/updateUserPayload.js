@@ -1,15 +1,11 @@
-module.exports = {
-  type: 'object',
-  properties: {
-    age: {
-      type: 'number'
-    },
-    firstName: {
-      type: 'string'
-    },
-    lastName: {
-      type: 'string'
-    }
-  },
-  additionalProperties: false
+const changeRolePayload = {
+	type: "object",
+	properties: {
+		role: {
+			type: "string",
+		},
+	},
+	additionalProperties: false,
 };
+
+export default changeRolePayload;

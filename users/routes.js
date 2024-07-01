@@ -1,50 +1,38 @@
-const router = require("express").Router();
+import express from "express";
+const router = express.Router();
 
 // Middleware Imports
-const isAuthenticatedMiddleware = require("./../common/middlewares/IsAuthenticatedMiddleware");
-const SchemaValidationMiddleware = require("../common/middlewares/SchemaValidationMiddleware");
-const CheckPermissionMiddleware = require("../common/middlewares/CheckPermissionMiddleware");
+import { check } from "./../common/middlewares/IsAuthenticatedMiddleware.js";
+import { verify } from "../common/middlewares/SchemaValidationMiddleware.js";
+import { has } from "../common/middlewares/CheckPermissionMiddleware.js";
 
 // Controller Imports
-const UserController = require("./controllers/UserController");
+import {
+	getUser,
+	updateUser,
+	getAllUsers,
+	changeRole,
+	deleteUser,
+} from "./controllers/UserController.js";
 
 // JSON Schema Imports for payload verification
-const updateUserPayload = require("./schemas/updateUserPayload");
-const changeRolePayload = require("./schemas/changeRolePayload");
+import updateUserPayload from "./schemas/updateUserPayload.js";
+import changeRolePayload from "./schemas/changeRolePayload.js";
 
-const { roles } = require("../config");
+import { roles } from "../config.js";
 
-router.get("/", [isAuthenticatedMiddleware.check], UserController.getUser);
+router.get("/", [check], getUser);
 
-router.patch(
-  "/",
-  [
-    isAuthenticatedMiddleware.check,
-    SchemaValidationMiddleware.verify(updateUserPayload),
-  ],
-  UserController.updateUser
-);
+router.patch("/", [check, verify(updateUserPayload)], updateUser);
 
-router.get(
-  "/all",
-  [isAuthenticatedMiddleware.check, CheckPermissionMiddleware.has(roles.ADMIN)],
-  UserController.getAllUsers
-);
+router.get("/all", [check, has(roles.ADMIN)], getAllUsers);
 
 router.patch(
-  "/change-role/:userId",
-  [
-    isAuthenticatedMiddleware.check,
-    CheckPermissionMiddleware.has(roles.ADMIN),
-    SchemaValidationMiddleware.verify(changeRolePayload),
-  ],
-  UserController.changeRole
+	"/change-role/:userId",
+	[check, has(roles.ADMIN), verify(changeRolePayload)],
+	changeRole
 );
 
-router.delete(
-  "/:userId",
-  [isAuthenticatedMiddleware.check, CheckPermissionMiddleware.has(roles.ADMIN)],
-  UserController.deleteUser
-);
+router.delete("/:userId", [check, has(roles.ADMIN)], deleteUser);
 
-module.exports = router;
+export default router;

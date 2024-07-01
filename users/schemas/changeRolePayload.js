@@ -1,12 +1,16 @@
-const { roles } = require('../../config');
+import { roles } from "../../config.js";
 
-module.exports = {
-  type: 'object',
-  properties: {
-    role: {
-      type: 'string',
-      enum: Object.values(roles)
-    }
-  },
-  additionalProperties: false
+export const type = "object";
+export const properties = {
+	role: {
+		type: "string",
+		enum: Object.values(roles),
+	},
+};
+export const additionalProperties = false;
+
+export default {
+	type,
+	properties,
+	additionalProperties,
 };

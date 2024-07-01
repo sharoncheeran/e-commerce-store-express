@@ -1,16 +1,15 @@
-module.exports = {
-  type: 'object',
-  properties: {
-    username: {
-      type: 'string'
-    },
-    password: {
-      type: 'string'
-    }
-  },
-  required: [
-    'username',
-    'password'
-  ],
-  additionalProperties: false
+const loginPayloadSchema = {
+	type: "object",
+	properties: {
+		username: {
+			type: "string",
+		},
+		password: {
+			type: "string",
+		},
+	},
+	required: ["username", "password"],
+	additionalProperties: false,
 };
+
+export default loginPayloadSchema;

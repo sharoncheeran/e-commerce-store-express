@@ -1,54 +1,41 @@
-const router = require("express").Router();
+import express from "express";
+const router = express.Router();
 
 // Controller Imports
-const ProductController = require("./controllers/ProductController");
+import {
+	getAllProducts,
+	getProductById,
+	createProduct,
+	updateProduct,
+	deleteProduct,
+} from "./controllers/ProductController.js";
 
 // Middleware Imports
-const isAuthenticatedMiddleware = require("./../common/middlewares/IsAuthenticatedMiddleware");
-const SchemaValidationMiddleware = require("../common/middlewares/SchemaValidationMiddleware");
-const CheckPermissionMiddleware = require("../common/middlewares/CheckPermissionMiddleware");
+import { check } from "./../common/middlewares/IsAuthenticatedMiddleware.js";
+import { verify } from "../common/middlewares/SchemaValidationMiddleware.js";
+import { has } from "../common/middlewares/CheckPermissionMiddleware.js";
 
 // JSON Schema Imports for payload verification
-const createProductPayload = require("./schemas/createProductPayload");
-const updateProductPayload = require("./schemas/updateProductPayload");
-const { roles } = require("../config");
+import createProductPayload from "./schemas/createProductPayload.js";
+import updateProductPayload from "./schemas/updateProductPayload.js";
+import { roles } from "../config.js";
 
-router.get(
-  "/",
-  [isAuthenticatedMiddleware.check],
-  ProductController.getAllProducts
-);
+router.get("/", [check], getAllProducts);
 
-router.get(
-  "/:productId",
-  [isAuthenticatedMiddleware.check],
-  ProductController.getProductById
-);
+router.get("/:productId", [check], getProductById);
 
 router.post(
-  "/",
-  [
-    isAuthenticatedMiddleware.check,
-    CheckPermissionMiddleware.has(roles.ADMIN),
-    SchemaValidationMiddleware.verify(createProductPayload),
-  ],
-  ProductController.createProduct
+	"/",
+	[check, has(roles.ADMIN), verify(createProductPayload)],
+	createProduct
 );
 
 router.patch(
-  "/:productId",
-  [
-    isAuthenticatedMiddleware.check,
-    CheckPermissionMiddleware.has(roles.ADMIN),
-    SchemaValidationMiddleware.verify(updateProductPayload),
-  ],
-  ProductController.updateProduct
+	"/:productId",
+	[check, has(roles.ADMIN), verify(updateProductPayload)],
+	updateProduct
 );
 
-router.delete(
-  "/:productId",
-  [isAuthenticatedMiddleware.check, CheckPermissionMiddleware.has(roles.ADMIN)],
-  ProductController.deleteProduct
-);
+router.delete("/:productId", [check, has(roles.ADMIN)], deleteProduct);
 
-module.exports = router;
+export default router;

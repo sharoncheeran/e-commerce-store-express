@@ -1,39 +1,34 @@
-const { roles } = require('../../config');
+import { roles } from "../../config.js";
 
-module.exports = {
-  type: 'object',
-  properties: {
-    username: {
-      type: 'string'
-    },
-    email: {
-      type: 'string',
-      pattern: "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"
-    },
-    password: {
-      type: 'string'
-    },
-    age: {
-      type: 'number'
-    },
-    firstName: {
-      type: 'string'
-    },
-    lastName: {
-      type: 'string'
-    },
-    role: {
-      type: 'string',
-      enum: Object.values(roles)
-    }
-  },
-  required: [
-    'username',
-    'email',
-    'password',
-    'age',
-    'firstName',
-    'lastName'
-  ],
-  additionalProperties: false
+const registerPayloadSchema = {
+	type: "object",
+	properties: {
+		username: {
+			type: "string",
+		},
+		email: {
+			type: "string",
+			pattern: "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+		},
+		password: {
+			type: "string",
+		},
+		age: {
+			type: "number",
+		},
+		firstName: {
+			type: "string",
+		},
+		lastName: {
+			type: "string",
+		},
+		role: {
+			type: "string",
+			enum: Object.values(roles),
+		},
+	},
+	required: ["username", "email", "password", "age", "firstName", "lastName"],
+	additionalProperties: false,
 };
+
+export default registerPayloadSchema;
